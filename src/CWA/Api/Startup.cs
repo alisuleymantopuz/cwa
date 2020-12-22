@@ -1,4 +1,5 @@
 using Api.Extensions;
+using Domain.Infrastructure.LoggerService;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpOverrides;
@@ -12,6 +13,7 @@ namespace Api
     {
         public Startup(IConfiguration configuration)
         {
+            LoggerServiceExtensions.LoadConfiguration();
             Configuration = configuration;
         }
 
@@ -22,6 +24,7 @@ namespace Api
         {
             services.ConfigureCors();
             services.ConfigureIISIntegration();
+            services.ConfigureLoggerService();
             services.AddControllers();
         }
 

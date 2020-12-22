@@ -1,5 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
+﻿using Domain.Infrastructure.Logging;
+using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,9 +15,9 @@ namespace Api.Controllers
             "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"
         };
 
-        private readonly ILogger<WeatherForecastController> _logger;
+        private readonly ILoggerManager _logger;
 
-        public WeatherForecastController(ILogger<WeatherForecastController> logger)
+        public WeatherForecastController(ILoggerManager logger)
         {
             _logger = logger;
         }
@@ -25,6 +25,12 @@ namespace Api.Controllers
         [HttpGet]
         public IEnumerable<WeatherForecast> Get()
         {
+
+            _logger.LogInfo("Here is info message from the controller.");
+            _logger.LogDebug("Here is debug message from the controller.");
+            _logger.LogWarn("Here is warn message from the controller.");
+            _logger.LogError("Here is error message from the controller.");
+
             var rng = new Random();
             return Enumerable.Range(1, 5).Select(index => new WeatherForecast
             {
