@@ -24,7 +24,7 @@ namespace Api.Controllers
             _mapper = mapper;
         }
 
-        [HttpGet]
+        [HttpGet(Name = "get-all-products")]
         public async Task<IActionResult> GetAllProducts()
         {
             var products = await _mediator.Send(new GetAllProductsQuery());
@@ -32,7 +32,7 @@ namespace Api.Controllers
             return Ok(productsResult);
         }
 
-        [HttpGet("{id}", Name = "ProductById")]
+        [HttpGet("{id}", Name = "get-product-by-id")]
         public async Task<IActionResult> GetProductById(Guid id)
         {
             var products = await _mediator.Send(new GetProductByIdQuery() { Id = id });
@@ -40,7 +40,7 @@ namespace Api.Controllers
             return Ok(productsResult);
         }
 
-        [HttpGet("{id}/tags", Name = "ProductWithDetails")]
+        [HttpGet("{id}/tags", Name = "get-product-details")]
         public async Task<IActionResult> GetProductByDetails(Guid id)
         {
             var products = await _mediator.Send(new GetProductByIdDetailsQuery() { Id = id });
@@ -48,7 +48,7 @@ namespace Api.Controllers
             return Ok(productsResult);
         }
 
-        [HttpPost]
+        [HttpPost(Name = "create-product")]
         [ServiceFilter(typeof(ValidationFilterAttribute))]
         public async Task<IActionResult> CreateProduct([FromBody] CreateProductDto product)
         {
@@ -58,7 +58,7 @@ namespace Api.Controllers
             return CreatedAtRoute("ProductById", new { id = createdProduct.Id }, createdProduct);
         }
 
-        [HttpDelete("{id}")]
+        [HttpDelete("{id}", Name = "delete-product")]
         public async Task<IActionResult> DeleteProduct(Guid id)
         {
             var product = await _mediator.Send(new GetProductByIdQuery() { Id = id });
@@ -66,20 +66,12 @@ namespace Api.Controllers
             return NoContent();
         }
 
-        [HttpPut("{id}")]
+        [HttpPut("{id}", Name = "update-product")]
         public async Task<IActionResult> UpdateProduct(Guid id, [FromBody] ProductDto product)
         {
             var productEntity = await _mediator.Send(new GetProductByIdQuery() { Id = id });
             _mapper.Map(product, productEntity);
             await _mediator.Send(new UpdateProductCommand() { Id = id, ProductUpdated = productEntity });
-            return NoContent();
-        }
-
-        [HttpPost("AddTagToProduct")]
-        [ServiceFilter(typeof(ValidationFilterAttribute))]
-        public async Task<IActionResult> AddTagToProductDto([FromBody] AddTagToProductDto tagProductInfo)
-        {
-            await _mediator.Send(new AddTagToProductCommand() { ProductId = tagProductInfo.ProductId, TagId = tagProductInfo.TagId });
             return NoContent();
         }
     }

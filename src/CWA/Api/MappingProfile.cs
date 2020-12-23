@@ -16,6 +16,7 @@ namespace Api
             CreateMap<Tag, CreateTagDto>().ReverseMap();
             CreateMap<ProductsTags, ProductTagsDto>().ReverseMap();
             CreateMap<ProductsTags, TagProductsDto>().ReverseMap();
+            CreateMap<ProductsTags, CategorizationDto>().ReverseMap();
         }
     }
 }

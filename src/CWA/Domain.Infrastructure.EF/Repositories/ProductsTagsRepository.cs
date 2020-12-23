@@ -27,12 +27,14 @@ namespace Domain.Infrastructure.EF.Repositories
         public async Task<IEnumerable<ProductsTags>> GetAllProductsTagsAsync()
         {
             return await FindAll()
+                        .Include(x => x.Product)
+                        .Include(x => x.Tag)
                         .ToListAsync();
         }
 
         public async Task<ProductsTags> GetProductsTagsAsync(Guid productId, Guid tagId)
         {
-            return await FindByCondition(m => m.ProductId.Equals(productId) && m.TagId==tagId)
+            return await FindByCondition(m => m.ProductId.Equals(productId) && m.TagId == tagId)
                         .FirstOrDefaultAsync();
         }
 

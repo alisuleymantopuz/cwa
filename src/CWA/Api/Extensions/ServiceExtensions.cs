@@ -1,9 +1,13 @@
 ﻿using Api.Filters;
+using Api.Hateoas;
 using Api.Middlewares;
+using Api.Models;
 using AutoMapper;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.OpenApi.Models;
+using Newtonsoft.Json;
+using System.Collections.Generic;
 
 namespace Api.Extensions
 {
@@ -55,6 +59,38 @@ namespace Api.Extensions
         public static void ConfigureCustomExceptionMiddleware(this IApplicationBuilder app)
         {
             app.UseMiddleware<ExceptionMiddleware>();
+        }
+        public static void ConfigureHateoas(this IMvcBuilder builder)
+        {
+            builder.AddHateoas(options =>
+            {
+                options
+                   .AddLink<TagDto>("get-tag-by-id", t => new { id = t.Id })
+                   .AddLink<IEnumerable<TagDto>>("get-all-tags")
+                   .AddLink<TagDetailsDto>("get-tag-details", t => new { id = t.Id })
+                   .AddLink<TagDto>("create-tag")
+                   .AddLink<TagDto>("update-tag", t => new { id = t.Id })
+                   .AddLink<TagDto>("delete-tag", t => new { id = t.Id });
+
+                options
+                   .AddLink<ProductDto>("get-product-by-id", p => new { id = p.Id })
+                   .AddLink<IEnumerable<ProductDto>>("get-all-products")
+                   .AddLink<ProductDetailDto>("get-product-details", p => new { id = p.Id })
+                   .AddLink<ProductDto>("create-product")
+                   .AddLink<ProductDto>("update-product", p => new { id = p.Id })
+                   .AddLink<ProductDto>("delete-product", p => new { id = p.Id });
+
+                options
+                   .AddLink<IEnumerable<CategorizationDto>>("get-categorizations")
+                   .AddLink<CategorizationDto>("add-tag-to-product");
+            });
+        }
+
+        public static IMvcBuilder ConfigureNewtonsoftJson(this IMvcBuilder builder)
+        {
+            builder.AddNewtonsoftJson(o => o.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore);
+            
+            return builder;
         }
     }
 }
