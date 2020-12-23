@@ -8,7 +8,6 @@ using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Newtonsoft.Json;
 
 namespace Api
 {
@@ -33,7 +32,7 @@ namespace Api
             services.ConfigureAutoMapper();
             services.ConfigureValidationFilter();
             services.ConfigureMediatR();
-            services.AddControllers().AddNewtonsoftJson(o => o.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore);
+            services.AddControllers().ConfigureNewtonsoftJson().ConfigureHateoas();
             services.ConfigureSwagger();
         }
 

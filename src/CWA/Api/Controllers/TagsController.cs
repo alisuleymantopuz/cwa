@@ -24,23 +24,23 @@ namespace Api.Controllers
             _mapper = mapper;
         }
 
-        [HttpGet]
+        [HttpGet(Name = "get-all-tags")]
         public async Task<IActionResult> GetAllTags()
         {
             var tags = await _mediator.Send(new GetAllTagsQuery());
-            var tagsResult = _mapper.Map<IEnumerable<TagDto>>(tags);
+            var tagsResult = _mapper.Map<IEnumerable<CategorizationDto>>(tags);
             return Ok(tagsResult);
         }
 
-        [HttpGet("{id}", Name = "TagById")]
+        [HttpGet("{id}", Name = "get-tag-by-id")]
         public async Task<IActionResult> GetTagById(Guid id)
         {
             var tags = await _mediator.Send(new GetTagByIdQuery() { Id = id });
-            var tagsResult = _mapper.Map<TagDto>(tags);
+            var tagsResult = _mapper.Map<CategorizationDto>(tags);
             return Ok(tagsResult);
         }
 
-        [HttpGet("{id}/products", Name = "TagWithDetails")]
+        [HttpGet("{id}/products", Name = "get-tag-details")]
         public async Task<IActionResult> GetTagByDetails(Guid id)
         {
             var tags = await _mediator.Send(new GetTagByIdDetailsQuery() { Id = id });
@@ -48,17 +48,16 @@ namespace Api.Controllers
             return Ok(tagsResult);
         }
 
-        [HttpPost]
+        [HttpPost(Name = "create-tag")]
         [ServiceFilter(typeof(ValidationFilterAttribute))]
         public async Task<IActionResult> CreateTag([FromBody] CreateTagDto tag)
         {
             var tagEntity = _mapper.Map<Tag>(tag);
-            await _mediator.Send(new CreateTagCommand() { NewTag = tagEntity });
-            var createdTag = _mapper.Map<TagDto>(tagEntity);
-            return CreatedAtRoute("TagById", new { id = createdTag.Id }, createdTag);
+            await _mediator.Send(new CreateTagCommand() { NewTag = tagEntity }); 
+            return NoContent();
         }
 
-        [HttpDelete("{id}")]
+        [HttpDelete("{id}", Name = "delete-tag")]
         public async Task<IActionResult> DeleteTag(Guid id)
         {
             var tag = await _mediator.Send(new GetTagByIdQuery() { Id = id });
@@ -66,8 +65,8 @@ namespace Api.Controllers
             return NoContent();
         }
 
-        [HttpPut("{id}")]
-        public async Task<IActionResult> UpdateTag(Guid id, [FromBody] TagDto tag)
+        [HttpPut("{id}", Name = "update-tag")]
+        public async Task<IActionResult> UpdateTag(Guid id, [FromBody] CategorizationDto tag)
         {
             var tagEntity = await _mediator.Send(new GetTagByIdQuery() { Id = id });
             _mapper.Map(tag, tagEntity);
