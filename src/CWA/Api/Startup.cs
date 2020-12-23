@@ -1,11 +1,14 @@
 using Api.Extensions;
+using Domain.Infrastructure.EF.Extensions;
 using Domain.Infrastructure.LoggerService;
+using Domain.Services.Extensions;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Newtonsoft.Json;
 
 namespace Api
 {
@@ -25,7 +28,13 @@ namespace Api
             services.ConfigureCors();
             services.ConfigureIISIntegration();
             services.ConfigureLoggerService();
-            services.AddControllers();
+            services.ConfigureDbContext(Configuration);
+            services.ConfigureRepositoryWrapper();
+            services.ConfigureAutoMapper();
+            services.ConfigureValidationFilter();
+            services.ConfigureMediatR();
+            services.AddControllers().AddNewtonsoftJson(o => o.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore);
+            services.ConfigureSwagger();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -35,16 +44,15 @@ namespace Api
             {
                 app.UseDeveloperExceptionPage();
             }
-
+            app.ConfigureCustomExceptionMiddleware();
+            app.ConfigureSwaggerMiddleware();
             app.UseHttpsRedirection();
-
             app.UseStaticFiles();
             app.UseCors("CorsPolicy");
             app.UseForwardedHeaders(new ForwardedHeadersOptions
             {
                 ForwardedHeaders = ForwardedHeaders.All
             });
-
             app.UseRouting();
 
             app.UseAuthorization();
