@@ -1,12 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using Domain.Pagination;
+using System; 
 using System.Threading.Tasks;
 
 namespace Domain.Repository
 {
     public interface ITagRepository : IRepositoryBase<Tag>
     {
-        Task<IEnumerable<Tag>> GetAllTagsAsync();
+        Task<PagedList<Tag>> GetTagsAsync(TagParameters tagsParameters);
         Task<Tag> GetTagByIdAsync(Guid tagId);
         Task<Tag> GetTagWithDetailsAsync(Guid tagId);
         void CreateTag(Tag tag);

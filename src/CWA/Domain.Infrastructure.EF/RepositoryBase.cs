@@ -22,6 +22,7 @@ namespace Domain.Infrastructure.EF
             return this.RepositoryContext.Set<T>()
                 .Where(expression).AsNoTracking();
         }
+
         public void Create(T entity)
         {
             this.RepositoryContext.Set<T>().Add(entity);
@@ -34,5 +35,5 @@ namespace Domain.Infrastructure.EF
         {
             this.RepositoryContext.Set<T>().Remove(entity);
         }
-    }
+    } 
 }

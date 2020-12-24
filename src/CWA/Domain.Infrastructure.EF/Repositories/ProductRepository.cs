@@ -1,4 +1,6 @@
-﻿using Domain.Repository;
+﻿using Domain.Pagination;
+using Domain.Repository;
+using Domain.Sorting;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -9,9 +11,12 @@ namespace Domain.Infrastructure.EF.Repositories
 {
     public class ProductRepository : RepositoryBase<Product>, IProductRepository
     {
-        public ProductRepository(RepositoryContext repositoryContext)
+
+        private ISortHelper<Product> _productSortHelper;
+        public ProductRepository(RepositoryContext repositoryContext, ISortHelper<Product> productSortHelper)
            : base(repositoryContext)
         {
+            _productSortHelper = productSortHelper;
         }
 
         public void CreateProduct(Product product)
@@ -35,6 +40,25 @@ namespace Domain.Infrastructure.EF.Repositories
         {
             return await FindByCondition(product => product.Id.Equals(productId))
                         .FirstOrDefaultAsync();
+        }
+
+        public async Task<PagedList<Product>> GetProductsAsync(ProductParameters productParameters)
+        {
+            var products = FindAll();
+
+            SearchByName(ref products, productParameters.Name);
+
+            var sorderProducts = _productSortHelper.ApplySort(products, productParameters.OrderBy);
+
+            return await PagedList<Product>.ToPagedList(sorderProducts, productParameters.PageNumber, productParameters.PageSize);
+        }
+
+        private void SearchByName(ref IQueryable<Product> products, string productName)
+        {
+            if (!products.Any() || string.IsNullOrWhiteSpace(productName))
+                return;
+
+            products = products.Where(o => o.Name.ToLower().Contains(productName.Trim().ToLower()));
         }
 
         public async Task<Product> GetProductWithDetailsAsync(Guid productId)

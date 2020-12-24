@@ -1,5 +1,6 @@
 ﻿using Domain.Infrastructure.EF.Repositories;
 using Domain.Repository;
+using Domain.Sorting;
 using System.Threading.Tasks;
 
 namespace Domain.Infrastructure.EF
@@ -7,9 +8,13 @@ namespace Domain.Infrastructure.EF
     public class RepositoryWrapper : IRepositoryWrapper
     {
         private RepositoryContext _repoContext;
-        public RepositoryWrapper(RepositoryContext repositoryContext)
+        private ISortHelper<Tag> _tagSortHelper;
+        private ISortHelper<Product> _productSortHelper;
+        public RepositoryWrapper(RepositoryContext repositoryContext, ISortHelper<Tag> tagSortHelper, ISortHelper<Product> productSortHelper)
         {
             _repoContext = repositoryContext;
+            _tagSortHelper = tagSortHelper;
+            _productSortHelper = productSortHelper;
         }
 
         private IProductRepository _products;
@@ -20,7 +25,7 @@ namespace Domain.Infrastructure.EF
             {
                 if (_products == null)
                 {
-                    _products = new ProductRepository(_repoContext);
+                    _products = new ProductRepository(_repoContext, _productSortHelper);
                 }
                 return _products;
 
@@ -34,7 +39,7 @@ namespace Domain.Infrastructure.EF
             {
                 if (_tags == null)
                 {
-                    _tags = new TagRepository(_repoContext);
+                    _tags = new TagRepository(_repoContext, _tagSortHelper);
                 }
                 return _tags;
             }
