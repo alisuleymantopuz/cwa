@@ -1,6 +1,8 @@
 ﻿using Domain.Infrastructure.Logging;
+using Domain.Pagination;
 using Domain.Repository;
 using MediatR;
+using System;
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
@@ -8,7 +10,7 @@ using System.Threading.Tasks;
 namespace Domain.Services
 {
 
-    public class GetAllTagsQueryHandler : IRequestHandler<GetAllTagsQuery, IEnumerable<Tag>>
+    public class GetAllTagsQueryHandler : IRequestHandler<GetAllTagsQuery, PagedList<Tag>>
     {
         public ILoggerManager Logger;
         public IRepositoryWrapper Repository { get; }
@@ -17,11 +19,21 @@ namespace Domain.Services
             Repository = repository;
             Logger = logger;
         }
-        public async Task<IEnumerable<Tag>> Handle(GetAllTagsQuery request, CancellationToken cancellationToken)
+        public async Task<PagedList<Tag>> Handle(GetAllTagsQuery request, CancellationToken cancellationToken)
         {
-            var tags = await Repository.Tag.GetAllTagsAsync();
+            Validate(request);
+            var tags = await Repository.Tag.GetTagsAsync(request.Parameters) ;
             Logger.LogInfo($"all tags returned from database.");
             return tags;
+        }
+
+        private void Validate(GetAllTagsQuery request)
+        {
+            if (request == null)
+                throw new ArgumentNullException("Request object can not be null.");
+
+            if (request.Parameters == null)
+                throw new ArgumentNullException("Parameters object can not be null.");
         }
     }
 }

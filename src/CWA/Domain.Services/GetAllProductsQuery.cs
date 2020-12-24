@@ -1,10 +1,11 @@
-﻿using MediatR;
-using System.Collections.Generic;
+﻿using Domain.Pagination;
+using MediatR;
 
 namespace Domain.Services
 {
-    public class GetAllProductsQuery : IRequest<IEnumerable<Product>>
+    public class GetAllProductsQuery : IRequest<PagedList<Product>>
     {
 
+        public ProductParameters Parameters { get; set; }
     }
 }

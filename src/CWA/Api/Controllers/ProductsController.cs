@@ -2,6 +2,7 @@
 using Api.Models;
 using AutoMapper;
 using Domain;
+using Domain.Pagination;
 using Domain.Services;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
@@ -25,9 +26,11 @@ namespace Api.Controllers
         }
 
         [HttpGet(Name = "get-all-products")]
-        public async Task<IActionResult> GetAllProducts()
+        public async Task<IActionResult> GetAllProducts([FromQuery] ProductParametersInfo productParameters)
         {
-            var products = await _mediator.Send(new GetAllProductsQuery());
+            var productParametersEntity = _mapper.Map<ProductParameters>(productParameters);
+            var products = await _mediator.Send(new GetAllProductsQuery() { Parameters = productParametersEntity });
+            Response.Headers.Add("X-Pagination", products.GetMetadata());
             var productsResult = _mapper.Map<IEnumerable<ProductDto>>(products);
             return Ok(productsResult);
         }

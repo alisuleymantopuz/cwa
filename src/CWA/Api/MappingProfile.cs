@@ -1,6 +1,7 @@
 ﻿using Api.Models;
 using AutoMapper;
 using Domain;
+using Domain.Pagination;
 
 namespace Api
 {
@@ -17,6 +18,8 @@ namespace Api
             CreateMap<ProductsTags, ProductTagsDto>().ReverseMap();
             CreateMap<ProductsTags, TagProductsDto>().ReverseMap();
             CreateMap<ProductsTags, CategorizationDto>().ReverseMap();
+            CreateMap<TagParameters, TagsParametersInfo>().ReverseMap();
+            CreateMap<ProductParameters, ProductParametersInfo>().ReverseMap();
         }
     }
 }
