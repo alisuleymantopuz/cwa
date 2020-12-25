@@ -1,9 +1,11 @@
-﻿using Api.Filters;
+﻿using Api.Configuration;
+using Api.Filters;
 using Api.Hateoas;
 using Api.Middlewares;
 using Api.Models;
 using AutoMapper;
 using Microsoft.AspNetCore.Builder;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.OpenApi.Models;
 using Newtonsoft.Json;
@@ -47,6 +49,13 @@ namespace Api.Extensions
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "Catalog web app", Version = "v1" });
             });
         }
+
+        public static void ConfigureAppConfiguration(this IServiceCollection services, IConfiguration configuration)
+        {
+            services.AddOptions<LoggingLevelConfiguration>().Bind(configuration.GetSection("Logging:LogLevel")).ValidateDataAnnotations();
+            services.AddOptions<ApiInfoConfiguration>().Bind(configuration.GetSection("ApiInfo")).ValidateDataAnnotations();
+        }
+
         public static void ConfigureSwaggerMiddleware(this IApplicationBuilder app)
         {
             app.UseSwagger();
@@ -89,7 +98,7 @@ namespace Api.Extensions
         public static IMvcBuilder ConfigureNewtonsoftJson(this IMvcBuilder builder)
         {
             builder.AddNewtonsoftJson(o => o.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore);
-            
+
             return builder;
         }
     }
