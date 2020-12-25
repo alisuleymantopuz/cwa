@@ -32,6 +32,7 @@ namespace Api
             services.ConfigureAutoMapper();
             services.ConfigureValidationFilter();
             services.ConfigureMediatR();
+            services.ConfigureAppConfiguration(Configuration);
             services.AddControllers().ConfigureNewtonsoftJson().ConfigureHateoas();
             services.ConfigureSwagger();
         }

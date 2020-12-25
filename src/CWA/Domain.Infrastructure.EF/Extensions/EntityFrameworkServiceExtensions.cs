@@ -11,7 +11,7 @@ namespace Domain.Infrastructure.EF.Extensions
     {
         public static void ConfigureDbContext(this IServiceCollection services, IConfiguration config)
         {
-            var connectionString = config["sqlConnection:connectionString"];
+            var connectionString = config["ConnectionStrings:sqlConnection"];
             services.AddDbContext<RepositoryContext>(o => o.UseSqlite(connectionString));
         }
 
