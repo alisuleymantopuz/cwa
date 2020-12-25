@@ -1,0 +1,8 @@
+.homeText {
+    font-size: 35px;
+    color: darkslategrey;
+    text-align: left;
+    position: relative;
+    top: 30px;
+    border-bottom: 1px solid #CCC;
+}
