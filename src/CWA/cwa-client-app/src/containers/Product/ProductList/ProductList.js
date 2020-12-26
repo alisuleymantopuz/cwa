@@ -55,7 +55,7 @@ class ProductList extends Component {
 
 const mapStateToProps = (state) => {
     return {
-        data: state.data
+        data: state.repository.data
     }
 }
 const mapDispatchToProps = (dispatch) => {

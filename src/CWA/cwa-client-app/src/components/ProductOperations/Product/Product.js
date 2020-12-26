@@ -28,8 +28,8 @@ const product = (props) => {
                     <ButtonGroup className="float-left">
                         <DropdownButton as={ButtonGroup} title="Actions">
                             <Dropdown.Item onClick={() => redirectToProductDetails(props.product.id, props.history)}>Details</Dropdown.Item>
-                            <Dropdown.Item bsStyle="success" onClick={() => redirectToUpdateProduct(props.product.id, props.history)}>Update</Dropdown.Item>
-                            <Dropdown.Item bsStyle="danger" onClick={() => rediterctToDeleteProduct(props.product.id, props.history)}>Delete</Dropdown.Item>
+                            <Dropdown.Item onClick={() => redirectToUpdateProduct(props.product.id, props.history)}>Update</Dropdown.Item>
+                            <Dropdown.Item onClick={() => rediterctToDeleteProduct(props.product.id, props.history)}>Delete</Dropdown.Item>
                         </DropdownButton>
                     </ButtonGroup>
                 </td>
