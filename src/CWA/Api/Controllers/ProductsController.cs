@@ -57,8 +57,8 @@ namespace Api.Controllers
         {
             var productEntity = _mapper.Map<Product>(product);
             await _mediator.Send(new CreateProductCommand() { NewProduct = productEntity });
-            var createdProduct = _mapper.Map<ProductDto>(productEntity);
-            return CreatedAtRoute("ProductById", new { id = createdProduct.Id }, createdProduct);
+            var createdProduct = _mapper.Map<ProductDto>(productEntity); 
+            return NoContent();
         }
 
         [HttpDelete("{id}", Name = "delete-product")]

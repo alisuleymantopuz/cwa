@@ -12,9 +12,6 @@ namespace Domain
         {
             ProductsTags = new List<ProductsTags>();
         }
-
-        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        [Key]
         public Guid Id { get; set; }
 
         [Required(ErrorMessage = "Name is required")]

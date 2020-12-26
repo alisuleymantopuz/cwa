@@ -19,12 +19,13 @@ const tag = (props) => {
             <tr>
                 <td>{props.tag.id}</td>
                 <td>{props.tag.name}</td>
+                <td><img src="https://picsum.photos/50/50" /></td>
                 <td>
                     <ButtonGroup className="float-left">
                         <DropdownButton as={ButtonGroup} title="Actions">
                             <Dropdown.Item onClick={() => redirectToTagDetails(props.tag.id, props.history)}>Details</Dropdown.Item>
-                            <Dropdown.Item bsStyle="success" onClick={() => redirectToUpdateTag(props.tag.id, props.history)}>Update</Dropdown.Item>
-                            <Dropdown.Item bsStyle="danger" onClick={() => rediterctToDeleteTag(props.tag.id, props.history)}>Delete</Dropdown.Item>
+                            <Dropdown.Item onClick={() => redirectToUpdateTag(props.tag.id, props.history)}>Update</Dropdown.Item>
+                            <Dropdown.Item onClick={() => rediterctToDeleteTag(props.tag.id, props.history)}>Delete</Dropdown.Item>
                         </DropdownButton>
                     </ButtonGroup>
                 </td>

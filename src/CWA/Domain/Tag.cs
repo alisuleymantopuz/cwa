@@ -11,10 +11,7 @@ namespace Domain
         public Tag()
         {
             ProductsTags = new List<ProductsTags>();
-        }
-
-        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        [Key]
+        }   
         public Guid Id { get; set; }
 
 

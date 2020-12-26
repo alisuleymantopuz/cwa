@@ -3,14 +3,16 @@ using System;
 using Domain.Infrastructure.EF;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace Domain.Infrastructure.EF.Migrations
 {
     [DbContext(typeof(RepositoryContext))]
-    partial class RepositoryContextModelSnapshot : ModelSnapshot
+    [Migration("20201226230229_initial-migration")]
+    partial class initialmigration
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -36,15 +38,6 @@ namespace Domain.Infrastructure.EF.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Product");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = new Guid("0fdaed30-cd1e-4935-81d3-a5f941d9cd5d"),
-                            Name = "IPhone X",
-                            ProductRegisterDate = new DateTime(2020, 12, 26, 23, 6, 17, 78, DateTimeKind.Utc).AddTicks(2205),
-                            UnitPrice = 1000m
-                        });
                 });
 
             modelBuilder.Entity("Domain.ProductsTags", b =>
@@ -66,14 +59,6 @@ namespace Domain.Infrastructure.EF.Migrations
                     b.HasIndex("TagId");
 
                     b.ToTable("ProductsTags");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = new Guid("ded8718f-a05b-4ac9-92b7-828551469831"),
-                            ProductId = new Guid("0fdaed30-cd1e-4935-81d3-a5f941d9cd5d"),
-                            TagId = new Guid("f025ad17-e714-4ede-8b9c-c6053471e106")
-                        });
                 });
 
             modelBuilder.Entity("Domain.Tag", b =>
@@ -93,13 +78,6 @@ namespace Domain.Infrastructure.EF.Migrations
                         .IsUnique();
 
                     b.ToTable("Tag");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = new Guid("f025ad17-e714-4ede-8b9c-c6053471e106"),
-                            Name = "Mobile phone"
-                        });
                 });
 
             modelBuilder.Entity("Domain.ProductsTags", b =>

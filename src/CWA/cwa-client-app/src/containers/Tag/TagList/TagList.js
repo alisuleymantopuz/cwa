@@ -29,7 +29,7 @@ class TagList extends Component {
                         <Table responsive striped>
                             <thead>
                                 <tr>
-                                    <th colSpan="3">
+                                    <th colSpan="4">
                                         <Button href="/createTag" className="float-right">
                                             Create Tag
                                         </Button>
@@ -38,6 +38,7 @@ class TagList extends Component {
                                 <tr>
                                     <th>Id</th>
                                     <th>Name</th>
+                                    <th>Photo</th>
                                     <th>Actions</th>
                                 </tr>
                             </thead>
@@ -54,7 +55,7 @@ class TagList extends Component {
 
 const mapStateToProps = (state) => {
     return {
-        data: state.data
+        data: state.repository.data
     }
 }
 const mapDispatchToProps = (dispatch) => {

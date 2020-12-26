@@ -29,8 +29,7 @@ namespace Domain.Infrastructure.EF.Repositories
         }
         public async Task<Tag> GetTagByIdAsync(Guid tagId)
         {
-            return await FindByCondition(Tag => Tag.Id.Equals(tagId))
-                        .FirstOrDefaultAsync();
+            return await this.RepositoryContext.Tags.FirstOrDefaultAsync(tag => tag.Id == tagId);
         }
 
         public async Task<PagedList<Tag>> GetTagsAsync(TagParameters tagsParameters)
@@ -54,9 +53,9 @@ namespace Domain.Infrastructure.EF.Repositories
 
         public async Task<Tag> GetTagWithDetailsAsync(Guid tagId)
         {
-            return await FindByCondition(Tag => Tag.Id.Equals(tagId))
+            return await FindByCondition(Tag => Tag.Id == tagId)
                         .Include(ac => ac.ProductsTags)
-                        .ThenInclude(x => x.Product)
+                        .ThenInclude(ac => ac.Product)
                         .FirstOrDefaultAsync();
         }
 
