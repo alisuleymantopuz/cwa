@@ -5,9 +5,10 @@ using Domain;
 using Domain.Pagination;
 using Domain.Services;
 using MediatR;
-using Microsoft.AspNetCore.Mvc; 
+using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace Api.Controllers
@@ -31,7 +32,7 @@ namespace Api.Controllers
         {
             var tagParametersEntity = _mapper.Map<TagParameters>(tagsParameters);
             var tags = await _mediator.Send(new GetAllTagsQuery() { Parameters = tagParametersEntity });
-            Response.Headers.Add("X-Pagination", tags.GetMetadata()); 
+            Response.Headers.Add("X-Pagination", tags.GetMetadata());
             var tagsResult = _mapper.Map<IEnumerable<TagDto>>(tags);
             return Ok(tagsResult);
         }
@@ -56,9 +57,11 @@ namespace Api.Controllers
         [ServiceFilter(typeof(ValidationFilterAttribute))]
         public async Task<IActionResult> CreateTag([FromBody] CreateTagDto tag)
         {
+            var tags = await _mediator.Send(new GetAllTagsQuery() { Parameters = new TagParameters { Name = tag.Name } });
+            if (tags.Any()) return BadRequest("This record is already available!");
             var tagEntity = _mapper.Map<Tag>(tag);
             await _mediator.Send(new CreateTagCommand() { NewTag = tagEntity });
-            return NoContent();
+            return Ok();
         }
 
         [HttpDelete("{id}", Name = "delete-tag")]
@@ -66,7 +69,7 @@ namespace Api.Controllers
         {
             var tag = await _mediator.Send(new GetTagByIdQuery() { Id = id });
             await _mediator.Send(new DeleteTagCommand() { TagDeleted = tag });
-            return NoContent();
+            return Ok();
         }
 
         [HttpPut("{id}", Name = "update-tag")]
@@ -75,7 +78,7 @@ namespace Api.Controllers
             var tagEntity = await _mediator.Send(new GetTagByIdQuery() { Id = id });
             _mapper.Map(tag, tagEntity);
             await _mediator.Send(new UpdateTagCommand() { Id = id, TagUpdated = tagEntity });
-            return NoContent();
+            return Ok();
         }
     }
 }

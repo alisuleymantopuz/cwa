@@ -6,6 +6,8 @@ import { BrowserRouter, Switch, Route } from 'react-router-dom';
 import NotFound from '../components/ErrorPages/NotFound/NotFound';
 import InternalError from '../components/ErrorPages/InternalError/InternalError';
 import asyncComponent from '../hoc/AsyncComponent/AsyncComponent';
+import CreateTag from './Tag/CreateTag/CreateTag';
+import CreateProduct from './Product/CreateProduct/CreateProduct';
 
 const AsyncTagList = asyncComponent(() => {
   return import('./Tag/TagList/TagList');
@@ -32,8 +34,10 @@ class App extends Component {
             <Route path="/" exact component={Home} />
             <Route path="/tags" component={AsyncTagList} />
             <Route path="/tagDetails/:id" component={AsyncTagDetails} />
+            <Route path="/createTag" component={CreateTag} />
             <Route path="/products" component={AsyncProductList} />
             <Route path="/productDetails/:id" component={AsyncProductDetails} />
+            <Route path="/createProduct" component={CreateProduct} />
             <Route path="/500" component={InternalError} />
             <Route path="*" component={NotFound} />
           </Switch>

@@ -8,6 +8,7 @@ using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace Api.Controllers
@@ -55,10 +56,11 @@ namespace Api.Controllers
         [ServiceFilter(typeof(ValidationFilterAttribute))]
         public async Task<IActionResult> CreateProduct([FromBody] CreateProductDto product)
         {
+            var products = await _mediator.Send(new GetAllProductsQuery() { Parameters = new ProductParameters { Name = product.Name } });
+            if (products.Any()) return BadRequest("This record is already available!");
             var productEntity = _mapper.Map<Product>(product);
             await _mediator.Send(new CreateProductCommand() { NewProduct = productEntity });
-            var createdProduct = _mapper.Map<ProductDto>(productEntity); 
-            return NoContent();
+            return Ok();
         }
 
         [HttpDelete("{id}", Name = "delete-product")]
@@ -66,7 +68,7 @@ namespace Api.Controllers
         {
             var product = await _mediator.Send(new GetProductByIdQuery() { Id = id });
             await _mediator.Send(new DeleteProductCommand() { ProductDeleted = product });
-            return NoContent();
+            return Ok();
         }
 
         [HttpPut("{id}", Name = "update-product")]
@@ -75,7 +77,7 @@ namespace Api.Controllers
             var productEntity = await _mediator.Send(new GetProductByIdQuery() { Id = id });
             _mapper.Map(product, productEntity);
             await _mediator.Send(new UpdateProductCommand() { Id = id, ProductUpdated = productEntity });
-            return NoContent();
+            return Ok();
         }
     }
 }

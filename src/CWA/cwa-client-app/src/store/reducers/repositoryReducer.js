@@ -15,6 +15,8 @@ const reducer = (state = initialState, action) => {
             return executePutDataSuccess(state, action);
         case actionTypes.DELETE_DATA_SUCCESS:
             return executeDeleteDataSuccess(state, action);
+        case actionTypes.CLOSE_SUCCESS_MODAL:
+            return executeCloseSuccessModal(state, action)
         default:
             return state;
     }
@@ -42,6 +44,14 @@ const executeDeleteDataSuccess = (state, action) => {
     return {
         ...state,
         showSuccessModal: true
+    }
+}
+
+const executeCloseSuccessModal = (state, action) => {
+    action.props.history.push(action.url);
+    return {
+        ...state,
+        showSuccessModal: false
     }
 }
 
