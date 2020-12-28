@@ -14,10 +14,10 @@ const navigation = (props) => {
                         <NavLink to={'/tags'} activeClassName="active" className="nav-link">Tags</NavLink>
                         <NavLink to={'/products'} activeClassName="active" className="nav-link">Products</NavLink>
                     </Nav>
-                    <Form inline>
+                    {/* <Form inline>
                         <FormControl type="text" placeholder="Search in products" className="mr-sm-2" />
                         <Button variant="outline-success">Search</Button>
-                    </Form>
+                    </Form> */}
                 </Navbar.Collapse>
             </Navbar>
         </Col>
