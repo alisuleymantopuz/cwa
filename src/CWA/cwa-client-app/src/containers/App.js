@@ -10,6 +10,7 @@ import CreateTag from './Tag/CreateTag/CreateTag';
 import UpdateTag from './Tag/UpdateTag/UpdateTag';
 import CreateProduct from './Product/CreateProduct/CreateProduct';
 import UpdateProduct from './Product/UpdateProduct/UpdateProduct';
+import DeleteTag from './Tag/DeleteTag/DeleteTag';
 
 const AsyncTagList = asyncComponent(() => {
   return import('./Tag/TagList/TagList');
@@ -38,6 +39,7 @@ class App extends Component {
             <Route path="/tagDetails/:id" component={AsyncTagDetails} />
             <Route path="/createTag" component={CreateTag} />
             <Route path="/updateTag/:id" component={UpdateTag} />
+            <Route path="/deleteTag/:id" component={DeleteTag} />
             <Route path="/products" component={AsyncProductList} />
             <Route path="/productDetails/:id" component={AsyncProductDetails} />
             <Route path="/createProduct" component={CreateProduct} />
