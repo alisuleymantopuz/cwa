@@ -4,11 +4,31 @@ import Aux from '../../../hoc/Auxiliary/Auxiliary';
 import { connect } from 'react-redux';
 import * as repositoryActions from '../../../store/actions/repositoryActions';
 import Tag from '../../../components/TagOperations/Tag/Tag';
-
+import NotificationService from '../../../signalR/NotificationService';
 
 class TagList extends Component {
+    constructor(props) {
+        super(props);
+        this.NotificationService = new NotificationService((message) => {
+            this.receiveMessage(message);
+        });
+    }
+
+    receiveMessage = (message) => {
+        console.log("Message received in receiveMessage function:" + message);
+        this.getData();
+    }
+
+    sendMessageSignal = (e) => {
+        e.preventDefault();
+        this.NotificationService.sendNotification("Notification send by client app sendMessageSignal function");
+    }
 
     componentDidMount = () => {
+        this.getData();
+    }
+
+    getData = () => {
         let url = '/api/tags';
         this.props.onGetData(url, { ...this.props });
     }

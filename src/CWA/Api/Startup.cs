@@ -1,4 +1,5 @@
 using Api.Extensions;
+using Api.Hubs;
 using Domain.Infrastructure.EF.Extensions;
 using Domain.Infrastructure.LoggerService;
 using Domain.Services.Extensions;
@@ -35,6 +36,8 @@ namespace Api
             services.ConfigureAppConfiguration(Configuration);
             services.AddControllers().ConfigureNewtonsoftJson().ConfigureHateoas();
             services.ConfigureSwagger();
+            services.AddSignalR();
+            services.AddSingleton<MessageHub>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -44,22 +47,25 @@ namespace Api
             {
                 app.UseDeveloperExceptionPage();
             }
+            app.UseRouting();
             app.ConfigureCustomExceptionMiddleware();
             app.ConfigureSwaggerMiddleware();
             app.UseHttpsRedirection();
             app.UseStaticFiles();
-            app.UseCors("CorsPolicy");
+            app.UseCors(builder =>
+              builder.WithOrigins("http://localhost:3000")
+                 .AllowAnyHeader().AllowAnyMethod().AllowCredentials()
+              );
             app.UseForwardedHeaders(new ForwardedHeadersOptions
             {
                 ForwardedHeaders = ForwardedHeaders.All
             });
-            app.UseRouting();
 
             app.UseAuthorization();
-
             app.UseEndpoints(endpoints =>
             {
-                endpoints.MapControllers();
+                endpoints.MapControllers(); 
+                endpoints.MapHub<MessageHub>("/messageHub");
             });
         }
     }
