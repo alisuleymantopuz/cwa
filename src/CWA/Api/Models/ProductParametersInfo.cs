@@ -6,7 +6,7 @@
         {
             OrderBy = "ProductRegisterDate";
             PageNumber = 1;
-            PageSize = 10;
+            PageSize = 100;
         }
         public int PageNumber { get; set; }
         public int PageSize { get; set; }

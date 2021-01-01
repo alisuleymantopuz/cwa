@@ -1,6 +1,7 @@
 using Api.Extensions;
 using Api.Hubs;
 using Domain.Infrastructure.EF.Extensions;
+using Domain.Infrastructure.Import;
 using Domain.Infrastructure.LoggerService;
 using Domain.Services.Extensions;
 using Microsoft.AspNetCore.Builder;
@@ -38,6 +39,8 @@ namespace Api
             services.ConfigureSwagger();
             services.AddSignalR();
             services.AddSingleton<MessageHub>();
+            services.ConfigureImport();
+            services.ConfigureHangfire();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -67,6 +70,7 @@ namespace Api
                 endpoints.MapControllers(); 
                 endpoints.MapHub<MessageHub>("/messageHub");
             });
+            app.ConfigureHangfireMiddleware();
         }
     }
 }

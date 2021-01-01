@@ -7,6 +7,8 @@
   <ItemGroup>
     <PackageReference Include="AutoMapper" Version="10.1.1" />
     <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="8.1.0" />
+    <PackageReference Include="Hangfire" Version="1.7.18" />
+    <PackageReference Include="Hangfire.MemoryStorage" Version="1.7.0" />
     <PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="3.1.10" />
     <PackageReference Include="Microsoft.AspNetCore.SignalR" Version="1.1.0" />
     <PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
@@ -17,6 +19,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Domain.Infrastructure.EF\Domain.Infrastructure.EF.csproj" />
+    <ProjectReference Include="..\Domain.Infrastructure.Import\Domain.Infrastructure.Import.csproj" />
     <ProjectReference Include="..\Domain.Infrastructure.LoggerService\Domain.Infrastructure.LoggerService.csproj" />
     <ProjectReference Include="..\Domain.Infrastructure\Domain.Infrastructure.csproj" />
     <ProjectReference Include="..\Domain.Services\Domain.Services.csproj" />

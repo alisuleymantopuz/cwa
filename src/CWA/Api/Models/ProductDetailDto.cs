@@ -10,6 +10,7 @@ namespace Api.Models
         public string Name { get; set; }
         public DateTime ProductRegisterDate { get; set; }
         public decimal UnitPrice { get; set; }
+        public bool IsImported { get; set; }
 
         [JsonProperty("tags")]
         public IEnumerable<ProductTagsDto> ProductsTags { get; set; }
