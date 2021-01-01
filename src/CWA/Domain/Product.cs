@@ -23,6 +23,7 @@ namespace Domain
 
         [Required(ErrorMessage = "Unit price is required")]
         public decimal UnitPrice { get; set; }
+        public bool IsImported { get; set; }
 
         public ICollection<ProductsTags> ProductsTags { get; set; }
 

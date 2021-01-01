@@ -1,9 +1,12 @@
 ﻿using Api.Configuration;
 using Api.Filters;
 using Api.Hateoas;
+using Api.JobHelpers;
 using Api.Middlewares;
 using Api.Models;
 using AutoMapper;
+using Hangfire;
+using Hangfire.MemoryStorage;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -32,6 +35,12 @@ namespace Api.Extensions
             services.Configure<IISOptions>(options =>
             {
             });
+        }
+        public static void ConfigureHangfire(this IServiceCollection services)
+        {
+            services.AddHangfire(x => x.UseMemoryStorage());
+            services.AddHangfireServer();
+            services.AddSingleton<IImportJobHelper, ImportJobHelper>();
         }
 
         public static void ConfigureAutoMapper(this IServiceCollection services)
@@ -87,6 +96,7 @@ namespace Api.Extensions
                    .AddLink<IEnumerable<ProductDto>>("get-all-products")
                    .AddLink<ProductDetailDto>("get-product-details", p => new { id = p.Id })
                    .AddLink<ProductDto>("create-product")
+                   .AddLink<ProductDto>("import-product")
                    .AddLink<ProductDto>("update-product", p => new { id = p.Id })
                    .AddLink<ProductDto>("delete-product", p => new { id = p.Id });
 
@@ -101,6 +111,12 @@ namespace Api.Extensions
             builder.AddNewtonsoftJson(o => o.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore);
 
             return builder;
+        }
+
+        public static void ConfigureHangfireMiddleware(this IApplicationBuilder app)
+        {
+            app.UseHangfireDashboard("/mydashboard");
+            app.UseHangfireServer();
         }
     }
 }

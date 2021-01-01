@@ -35,5 +35,10 @@ namespace Domain.Infrastructure.EF
         {
             this.RepositoryContext.Set<T>().Remove(entity);
         }
+
+        public void Create(T[] entities)
+        {
+            this.RepositoryContext.Set<T>().AddRange(entities);
+        }
     } 
 }

@@ -29,6 +29,7 @@ namespace Domain.Infrastructure.EF
             modelBuilder.Entity<Product>().Property(u => u.Name).IsRequired();
             modelBuilder.Entity<Product>().Property(u => u.UnitPrice).IsRequired();
             modelBuilder.Entity<Product>().Property(u => u.ProductRegisterDate).IsRequired();
+            modelBuilder.Entity<Product>().Property(u => u.IsImported).IsRequired().HasDefaultValue(false);
             modelBuilder.Entity<Product>().HasMany(u => u.ProductsTags).WithOne(x => x.Product).HasForeignKey(x => x.ProductId);
 
             modelBuilder.Entity<ProductsTags>().Property(u => u.Id).IsRequired();
