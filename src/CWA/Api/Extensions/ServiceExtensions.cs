@@ -19,10 +19,11 @@ namespace Api.Extensions
         {
             services.AddCors(options =>
             {
-                options.AddPolicy("CorsPolicy",
-                    builder => builder.AllowAnyOrigin()
-                    .AllowAnyMethod()
-                    .AllowAnyHeader());
+                options.AddPolicy("AllowAnyOrigin",
+                    builder => builder.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader());
+
+                options.AddPolicy("AllowSpecificOrigin",
+                    builder => builder.WithOrigins("localhost:3000").AllowAnyMethod().AllowAnyHeader());
             });
         }
 

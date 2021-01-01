@@ -1,4 +1,5 @@
 ﻿using Api.Filters;
+using Api.Hubs;
 using Api.Models;
 using AutoMapper;
 using Domain;
@@ -6,6 +7,7 @@ using Domain.Pagination;
 using Domain.Services;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.SignalR;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -19,11 +21,13 @@ namespace Api.Controllers
     {
         private readonly IMediator _mediator;
         private readonly IMapper _mapper;
+        private readonly IHubContext<MessageHub> _messageHubContext;
 
-        public TagsController(IMediator mediator, IMapper mapper)
+        public TagsController(IMediator mediator, IMapper mapper, IHubContext<MessageHub> messageHubContext)
         {
             _mediator = mediator;
             _mapper = mapper;
+            _messageHubContext = messageHubContext;
         }
 
         [HttpGet(Name = "get-all-tags")]
@@ -61,6 +65,7 @@ namespace Api.Controllers
             if (tags.Any()) return BadRequest("This record is already available!");
             var tagEntity = _mapper.Map<Tag>(tag);
             await _mediator.Send(new CreateTagCommand() { NewTag = tagEntity });
+            await _messageHubContext.Clients.All.SendAsync("ReceiveMessage", $"New tag added. Tag name: {tag.Name}");
             return Ok();
         }
 
@@ -69,6 +74,7 @@ namespace Api.Controllers
         {
             var tag = await _mediator.Send(new GetTagByIdQuery() { Id = id });
             await _mediator.Send(new DeleteTagCommand() { TagDeleted = tag });
+            await _messageHubContext.Clients.All.SendAsync("ReceiveMessage", $"tag deleted. Tag name: {tag.Name}");
             return Ok();
         }
 
@@ -78,6 +84,7 @@ namespace Api.Controllers
             var tagEntity = await _mediator.Send(new GetTagByIdQuery() { Id = id });
             _mapper.Map(tag, tagEntity);
             await _mediator.Send(new UpdateTagCommand() { Id = id, TagUpdated = tagEntity });
+            await _messageHubContext.Clients.All.SendAsync("ReceiveMessage", $"tag updated. Tag name: {tagEntity.Name}");
             return Ok();
         }
     }
